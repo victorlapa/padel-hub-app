@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "WebFetch(domain:css-tricks.com)",
+      "WebFetch(domain:tailwindcss.com)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(mv:*)",
+      "Bash(npm install:*)"
+    ],
+    "deny": []
+  }
+}
