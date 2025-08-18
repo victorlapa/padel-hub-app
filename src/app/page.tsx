@@ -1,18 +1,21 @@
 "use client";
 
+import DateSelector from "@/components/Home/DateSelector";
 import ProfileBar from "@/components/ProfileBar";
 import { Button } from "@/components/ui/button";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "@/components/ui/modal";
 import { motion } from "framer-motion";
 import React from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  
+  const now = new Date();
+  const [day, setDay] = React.useState<number>(now.getDate());
+  const [month, setMonth] = React.useState<number>(now.getMonth() + 1);
+  const [year, setYear] = React.useState<number>(now.getFullYear());
   const [isOverlayOpen, setIsOverlayOpen] = React.useState(false);
   const [isInQueue, setIsInQueue] = React.useState(false);
   const [queueTimer, setQueueTimer] = React.useState(0);
@@ -97,6 +100,78 @@ export default function Home() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const getDaysInMonth = (month: number, year: number): number => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const handleNextDay = () => {
+    const maxDays = getDaysInMonth(month, year);
+    if (day < maxDays) {
+      setDay(prev => prev + 1);
+    } else {
+      // Move to next month
+      if (month === 12) {
+        setMonth(1);
+        setYear(prev => prev + 1);
+      } else {
+        setMonth(prev => prev + 1);
+      }
+      setDay(1);
+    }
+  };
+
+  const handlePreviousDay = () => {
+    if (day > 1) {
+      setDay(prev => prev - 1);
+    } else {
+      // Move to previous month
+      if (month === 1) {
+        setMonth(12);
+        setYear(prev => prev - 1);
+      } else {
+        setMonth(prev => prev - 1);
+      }
+      const newMaxDays = getDaysInMonth(month === 1 ? 12 : month - 1, month === 1 ? year - 1 : year);
+      setDay(newMaxDays);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (month === 12) {
+      setMonth(1);
+      setYear(prev => prev + 1);
+    } else {
+      setMonth(prev => prev + 1);
+    }
+    
+    // Adjust day if current day doesn't exist in new month
+    const maxDaysInNewMonth = getDaysInMonth(month === 12 ? 1 : month + 1, month === 12 ? year + 1 : year);
+    if (day > maxDaysInNewMonth) {
+      setDay(maxDaysInNewMonth);
+    }
+  };
+
+  const handlePreviousMonth = () => {
+    if (month === 1) {
+      setMonth(12);
+      setYear(prev => prev - 1);
+    } else {
+      setMonth(prev => prev - 1);
+    }
+    
+    // Adjust day if current day doesn't exist in new month
+    const maxDaysInNewMonth = getDaysInMonth(month === 1 ? 12 : month - 1, month === 1 ? year - 1 : year);
+    if (day > maxDaysInNewMonth) {
+      setDay(maxDaysInNewMonth);
+    }
+  };
+
+  React.useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/onboarding");
+    }
+  }, [status, router]);
+
   React.useEffect(() => {
     return () => {
       if (intervalRef.current) {
@@ -108,13 +183,41 @@ export default function Home() {
     };
   }, []);
 
+  if (status === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+          <p className="mt-2 text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null;
+  }
+
   return (
     <div className="bg-background text-foreground min-h-screen w-full p-5">
-      <ProfileBar elo={1000} userName="Victor" maxElo={2000} />
+      <ProfileBar 
+        elo={1000} 
+        userName={session.user?.name || "Usuário"} 
+        maxElo={2000} 
+      />
       <div className="py-8 text-center">
         <h1 className="mb-4 text-4xl font-bold">Padel Hub</h1>
         <p className="text-muted-foreground text-lg">Bora pra quadra?</p>
         <h2>Insira um ou mais horarios disponíveis</h2>
+        <DateSelector
+          day={day}
+          month={month}
+          year={year}
+          onNext={handleNextDay}
+          onPrevious={handlePreviousDay}
+          onNextMonth={handleNextMonth}
+          onPreviousMonth={handlePreviousMonth}
+        />
         <div className="h-[12px]" />
 
         {isInQueue && !matchFound && (
@@ -193,21 +296,6 @@ export default function Home() {
             </Button>
           </motion.div>
         )}
-
-        {/* <Modal
-          isOpen={isOverlayOpen}
-          onClose={() => setIsOverlayOpen(false)}
-          title="Procurando partida..."
-          description="Estamos buscando jogadores com preferências similares às suas."
-          size="sm"
-        >
-          <ModalBody>
-            <p className="text-gray-700 text-center">
-              Aguarde enquanto encontramos outros jogadores disponíveis para sua
-              partida.
-            </p>
-          </ModalBody>
-        </Modal> */}
       </div>
     </div>
   );

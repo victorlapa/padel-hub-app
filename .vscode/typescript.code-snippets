@@ -1,0 +1,87 @@
+{
+  "React Component": {
+    "prefix": "rfc",
+    "body": [
+      "interface ${1:${TM_FILENAME_BASE}}Props {",
+      "  $2",
+      "}",
+      "",
+      "export default function ${1:${TM_FILENAME_BASE}}({ $3 }: ${1:${TM_FILENAME_BASE}}Props) {",
+      "  return (",
+      "    <div className=\"$4\">",
+      "      $0",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "Create a React functional component with TypeScript interface"
+  },
+  "React Component with State": {
+    "prefix": "rfcs",
+    "body": [
+      "\"use client\";",
+      "",
+      "import { useState } from \"react\";",
+      "",
+      "interface ${1:${TM_FILENAME_BASE}}Props {",
+      "  $2",
+      "}",
+      "",
+      "export default function ${1:${TM_FILENAME_BASE}}({ $3 }: ${1:${TM_FILENAME_BASE}}Props) {",
+      "  const [${4:state}, set${4/(.*)/${4:/capitalize}/}] = useState$5($6);",
+      "",
+      "  return (",
+      "    <div className=\"$7\">",
+      "      $0",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "Create a React functional component with state and TypeScript interface"
+  },
+  "React Hook": {
+    "prefix": "rhook",
+    "body": [
+      "\"use client\";",
+      "",
+      "import { useState$1 } from \"react\";",
+      "",
+      "export function use${2:${TM_FILENAME_BASE/use(.*)/${1:/capitalize}/}}($3) {",
+      "  $0",
+      "",
+      "  return {$4};",
+      "}"
+    ],
+    "description": "Create a custom React hook"
+  },
+  "Shadcn UI Component": {
+    "prefix": "shad",
+    "body": [
+      "import * as React from \"react\";",
+      "import { cn } from \"@/lib/utils\";",
+      "",
+      "interface ${1:${TM_FILENAME_BASE}}Props extends React.${2:HTMLAttributes}<HTML${3:Div}Element> {",
+      "  $4",
+      "}",
+      "",
+      "const ${1:${TM_FILENAME_BASE}} = React.forwardRef<HTML${3:Div}Element, ${1:${TM_FILENAME_BASE}}Props>(",
+      "  ({ className, $5, ...props }, ref) => {",
+      "    return (",
+      "      <${6:div}",
+      "        ref={ref}",
+      "        className={cn(\"$7\", className)}",
+      "        {...props}",
+      "      >",
+      "        $0",
+      "      </${6:div}>",
+      "    );",
+      "  }",
+      ");",
+      "",
+      "${1:${TM_FILENAME_BASE}}.displayName = \"${1:${TM_FILENAME_BASE}}\";",
+      "",
+      "export { ${1:${TM_FILENAME_BASE}} };"
+    ],
+    "description": "Create a shadcn/ui style component with forwardRef"
+  }
+}

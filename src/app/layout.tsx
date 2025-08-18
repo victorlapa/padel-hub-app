@@ -1,7 +1,8 @@
-"use client";
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import BottomNav from "@/components/bottom-nav";
+import SessionProvider from "@/components/SessionProvider";
+import Header from "@/components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SessionProvider>
+          <div className="flex flex-col h-screen">
+            <Header />
+            <main className="flex-1 overflow-hidden">
+              {children}
+            </main>
+            <BottomNav />
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );
