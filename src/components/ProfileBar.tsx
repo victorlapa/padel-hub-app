@@ -1,52 +1,52 @@
-import { User } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { User } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ProfileBarProps {
-  userName: string
-  elo: number
-  maxElo?: number
-  className?: string
+  userName: string;
+  elo: number;
+  maxElo?: number;
+  className?: string;
 }
 
-export default function ProfileBar({ 
-  userName, 
-  elo, 
+export default function ProfileBar({
+  userName,
+  elo,
   maxElo = 2000,
-  className 
+  className,
 }: ProfileBarProps) {
-  const progressPercentage = Math.min((elo / maxElo) * 100, 100)
-  
+  const progressPercentage = Math.min((elo / maxElo) * 100, 100);
+
   return (
-    <div className={cn(
-      "w-full bg-white rounded-lg shadow-sm border p-4 flex items-center gap-4",
-      className
-    )}>
-      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-        <User className="w-6 h-6 text-white" />
+    <div
+      className={cn(
+        "flex w-full items-center gap-4 rounded-lg border bg-white p-4 shadow-sm",
+        className,
+      )}
+    >
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
+        <User className="h-6 w-6 text-white" />
       </div>
-      
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold text-gray-900 truncate">
+
+      <div className="min-w-0 flex-1">
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="truncate text-lg font-semibold text-gray-900">
             {userName}
           </h3>
-          <span className="text-sm font-medium text-gray-600">
-            ELO: {elo}
-          </span>
+          <span className="text-sm font-medium text-gray-600">ELO: {elo}</span>
         </div>
-        
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-500 ease-out"
+
+        <div className="h-2 w-full rounded-full bg-gray-200">
+          <div
+            className="h-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 transition-all duration-500 ease-out"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
-        
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+
+        <div className="mt-1 flex justify-between text-xs text-gray-500">
           <span>Iniciante</span>
           <span>Profissional</span>
         </div>
       </div>
     </div>
-  )
+  );
 }
