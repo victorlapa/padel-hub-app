@@ -2,16 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Onboarding() {
   const router = useRouter();
 
   const handleGoogleLogin = async () => {
     try {
-      // Redirect to main app after login attempt
-      router.push("/");
+      await signIn("google", { callbackUrl: "/" });
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -43,26 +42,6 @@ export default function Onboarding() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="space-y-4"
-        >
-          <div className="flex items-center space-x-3 text-gray-700">
-            <div className="h-2 w-2 rounded-full bg-green-500"></div>
-            <span>Matchmaking inteligente</span>
-          </div>
-          <div className="flex items-center space-x-3 text-gray-700">
-            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-            <span>Chat em tempo real</span>
-          </div>
-          <div className="flex items-center space-x-3 text-gray-700">
-            <div className="h-2 w-2 rounded-full bg-purple-500"></div>
-            <span>Sistema de ranking</span>
-          </div>
-        </motion.div>
-
-        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
@@ -72,7 +51,7 @@ export default function Onboarding() {
             onClick={handleGoogleLogin}
             className="h-12 w-full border border-gray-300 bg-white text-base font-medium text-gray-700 shadow-md transition-all duration-200 hover:bg-gray-50 hover:shadow-lg"
           >
-            <Image src="/google.svg" alt="Google" width={24} height={24} />
+            <span className="mr-2 text-lg">G</span>
             Continuar com Google
           </Button>
 

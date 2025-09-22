@@ -77,9 +77,8 @@ export default function Home() {
 
   const handleAcceptMatch = () => {
     stopAcceptTimer();
-    // Here you would typically navigate to game lobby or handle match acceptance
-    alert("Partida aceita! Redirecionando para o lobby...");
     stopQueue();
+    router.push("/lobby");
   };
 
   const handleDeclineMatch = () => {

@@ -1,8 +1,10 @@
+"use client";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/bottom-nav";
 import { SessionProvider } from "@/components/SessionProvider";
-import { initializeDatabase } from "@/lib/database";
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,14 +16,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Initialize database connection
-initializeDatabase().catch(console.error);
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const hideBottomNav = pathname === "/onboarding";
+
   return (
     <html lang="en">
       <body
@@ -30,7 +32,7 @@ export default function RootLayout({
         <SessionProvider>
           <div className="flex h-screen flex-col">
             <main className="flex-1 overflow-hidden">{children}</main>
-            <BottomNav />
+            {!hideBottomNav && <BottomNav />}
           </div>
         </SessionProvider>
       </body>
