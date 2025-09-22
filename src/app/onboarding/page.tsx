@@ -3,42 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Onboarding() {
-  const { data: session, status } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      // Redirect to main app if user is already signed in
-      router.push("/");
-    }
-  }, [session, router]);
 
   const handleGoogleLogin = async () => {
     try {
-      await signIn("google", { 
-        callbackUrl: "/",
-        redirect: true 
-      });
+      // Redirect to main app after login attempt
+      router.push("/");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
-
-  if (status === "loading") {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
-          <p className="mt-2 text-gray-600">Carregando...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 p-8">
@@ -48,7 +25,6 @@ export default function Onboarding() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md space-y-8 text-center"
       >
-        {/* Logo and Title */}
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
@@ -66,7 +42,6 @@ export default function Onboarding() {
           </p>
         </motion.div>
 
-        {/* Features */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -87,7 +62,6 @@ export default function Onboarding() {
           </div>
         </motion.div>
 
-        {/* Google Login Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

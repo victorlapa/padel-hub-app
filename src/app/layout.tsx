@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/bottom-nav";
-import SessionProvider from "@/components/SessionProvider";
-import Header from "@/components/Header";
+import { SessionProvider } from "@/components/SessionProvider";
+import { initializeDatabase } from "@/lib/database";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// Initialize database connection
+initializeDatabase().catch(console.error);
 
 export default function RootLayout({
   children,
@@ -25,11 +28,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          <div className="flex flex-col h-screen">
-            <Header />
-            <main className="flex-1 overflow-hidden">
-              {children}
-            </main>
+          <div className="flex h-screen flex-col">
+            <main className="flex-1 overflow-hidden">{children}</main>
             <BottomNav />
           </div>
         </SessionProvider>
