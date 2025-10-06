@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user }) {
       try {
         // Save user to database
         await trackUserLogin({
@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
         });
         return true;
       } catch (error) {
-        console.error('Error during sign in:', error);
+        console.error("Error during sign in:", error);
         return true; // Allow sign in even if tracking fails
       }
     },
