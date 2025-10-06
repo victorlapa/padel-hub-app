@@ -31,12 +31,12 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, account }) {
       if (account) {
-        token.id = account.id;
+        token.id = account.providerAccountId;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token?.sub) {
+      if (token?.sub && session.user) {
         session.user.id = token.sub;
       }
       return session;
