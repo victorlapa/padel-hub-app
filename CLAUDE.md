@@ -5,7 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 This is "Padel Hub" - a Next.js 15 application for padel matchmaking, built with React 19, TypeScript, and Tailwind CSS. The app uses Portuguese text
-Users should be able to set their available times and dates, and clubs that they are willing to play so they can queue up to find people with similar preferences, once a game is found the users go to a game lobby where they set up and book the court
+
+Users should be able to create lobbies with defined times and location and they become available publicly for anyone that wants to join, the goal is to unite 4 people to play a Padel match.
 
 ## Development Commands
 
